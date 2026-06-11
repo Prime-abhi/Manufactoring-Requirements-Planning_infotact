@@ -26,12 +26,13 @@ CREATE TABLE `bom_link` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `parent_item_id` bigint NOT NULL,
   `child_item_id` bigint NOT NULL,
-  `quantity_required` double NOT NULL,
+  `quantity_required` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `parent_item_id` (`parent_item_id`),
+  UNIQUE KEY `uk_bom_parent_child` (`parent_item_id`,`child_item_id`),
   KEY `child_item_id` (`child_item_id`),
   CONSTRAINT `bom_link_ibfk_1` FOREIGN KEY (`parent_item_id`) REFERENCES `items` (`id`),
-  CONSTRAINT `bom_link_ibfk_2` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`)
+  CONSTRAINT `bom_link_ibfk_2` FOREIGN KEY (`child_item_id`) REFERENCES `items` (`id`),
+  CONSTRAINT `chk_bom_quantity_required` CHECK ((`quantity_required` > 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -57,9 +58,9 @@ CREATE TABLE `items` (
   `description` text,
   `item_type` enum('FINISHED_GOOD','SUB_ASSEMBLY','RAW_MATERIAL') NOT NULL,
   `unit` varchar(20) DEFAULT NULL,
-  `available_quantity` double DEFAULT '0',
-  `minimum_stock_limit` double DEFAULT '0',
-  `unit_price` double DEFAULT NULL,
+  `available_quantity` decimal(10,2) DEFAULT '0.00',
+  `minimum_stock_limit` decimal(10,2) DEFAULT '0.00',
+  `unit_price` decimal(10,2) DEFAULT NULL,
   `supplier_name` varchar(100) DEFAULT NULL,
   `sku` varchar(50) DEFAULT NULL,
   `status` enum('AVAILABLE','LOW_STOCK') DEFAULT 'AVAILABLE',
@@ -97,8 +98,11 @@ CREATE TABLE `production_requests` (
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   KEY `requested_by` (`requested_by`),
+  KEY `fk_production_requests_approved_by` (`approved_by`),
+  CONSTRAINT `fk_production_requests_approved_by` FOREIGN KEY (`approved_by`) REFERENCES `users` (`id`),
   CONSTRAINT `production_requests_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
-  CONSTRAINT `production_requests_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`id`)
+  CONSTRAINT `production_requests_ibfk_2` FOREIGN KEY (`requested_by`) REFERENCES `users` (`id`),
+  CONSTRAINT `chk_requested_quantity` CHECK ((`requested_quantity` > 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +126,7 @@ CREATE TABLE `purchase_orders` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `po_number` varchar(50) NOT NULL,
   `item_id` bigint NOT NULL,
-  `quantity` double NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
   `supplier_name` varchar(100) DEFAULT NULL,
   `status` enum('CREATED','APPROVED','CANCELLED') DEFAULT 'CREATED',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -130,7 +134,8 @@ CREATE TABLE `purchase_orders` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `po_number` (`po_number`),
   KEY `item_id` (`item_id`),
-  CONSTRAINT `purchase_orders_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
+  CONSTRAINT `purchase_orders_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  CONSTRAINT `chk_purchase_order_quantity` CHECK ((`quantity` > 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -180,4 +185,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-11 20:23:08
+-- Dump completed on 2026-06-11 20:55:00
