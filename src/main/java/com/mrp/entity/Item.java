@@ -1,5 +1,5 @@
 package com.mrp.entity;
 
-public class Product {
+public class Item {
 
 }

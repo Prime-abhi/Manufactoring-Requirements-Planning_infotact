@@ -1,5 +1,5 @@
 package com.mrp.entity;
 
-public class RawMaterial {
+public class BomLink {
 
 }
