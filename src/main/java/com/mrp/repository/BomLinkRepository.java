@@ -7,10 +7,10 @@ import java.util.List;
 public interface BomLinkRepository
         extends JpaRepository<BomLink, Long> {
 
-    List<BomLink> findByParentItemId(Long parentItemId);
+    List<BomLink> findByParentItem_Id(Long parentItemId);
 
-    List<BomLink> findByChildItemId(Long childItemId);
+    List<BomLink> findByChildItem_Id(Long childItemId);
 
-    boolean existsByParentItemIdAndChildItemId(
+    boolean existsByParentItem_IdAndChildItem_Id(
         Long parentItemId, Long childItemId);
 }

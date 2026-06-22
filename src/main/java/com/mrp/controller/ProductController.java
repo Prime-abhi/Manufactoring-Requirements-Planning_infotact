@@ -1,46 +1,52 @@
  
 package com.mrp.controller;
 
-import com.mrp.dto.MrpResultResponse;
-import com.mrp.service.MrpService;
+import com.mrp.entity.Product;
+import com.mrp.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/mrp")
-public class MrpController {
+@RequestMapping("/api/products")
+public class ProductController {
 
-    private final MrpService mrpService;
+    private final ProductService productService;
 
-    public MrpController(MrpService mrpService) {
-        this.mrpService = mrpService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     /**
-     * GET /api/mrp/explode/{itemId}?quantity=<number>
+     * GET /api/products
+     * GET /api/products?type=FINISHED_GOOD
      */
-    @GetMapping("/explode/{itemId}")
-    public ResponseEntity<?> explode(
-            @PathVariable String itemId,
-            @RequestParam int quantity) {
-        if (quantity <= 0) {
-            return ResponseEntity.badRequest()
-                .body(Map.of("error", "quantity must be a positive number"));
-        }
+    @GetMapping
+    public ResponseEntity<?> getProducts(@RequestParam(required = false) String type) {
         try {
-            MrpResultResponse result = mrpService.explode(itemId, quantity);
-            return ResponseEntity.ok(result);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+            List<Product> products = productService.getProducts(type);
+            return ResponseEntity.ok(products);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Invalid type value: " + type));
         }
     }
+
+    /**
+     * GET /api/products/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
+        return productService.getProductById(id)
+            .<ResponseEntity<?>>map(ResponseEntity::ok)
+            .orElse(ResponseEntity.status(404)
+                .body(new ErrorResponse("Product not found")));
+    }
+
+    record ErrorResponse(String error) {}
 
     // ── Exception Handlers ────────────────────────────────────────────────────
 

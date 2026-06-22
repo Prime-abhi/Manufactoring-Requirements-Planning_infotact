@@ -36,7 +36,7 @@ public class BomLinkService {
                 "Item cannot be its own child");
 
         if (bomLinkRepository
-                .existsByParentItemIdAndChildItemId(
+                .existsByParentItem_IdAndChildItem_Id(
                     parentId, childId))
             throw new RuntimeException(
                 "This BOM link already exists");
@@ -57,7 +57,7 @@ public class BomLinkService {
     // Get direct children of an item
     public List<BomLink> getChildren(Long parentId) {
         return bomLinkRepository
-            .findByParentItemId(parentId);
+            .findByParentItem_Id(parentId);
     }
 
     // Get full recursive tree
@@ -95,7 +95,7 @@ public class BomLinkService {
         newVisited.add(item.getId());
 
         List<BomLink> childLinks = bomLinkRepository
-            .findByParentItemId(item.getId());
+            .findByParentItem_Id(item.getId());
 
         List<Map<String, Object>> children =
             new ArrayList<>();
