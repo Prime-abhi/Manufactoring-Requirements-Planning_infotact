@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard"
 import Items from "./pages/Items"
 import Bom from "./pages/Bom"
 import InventoryStatus from "./pages/InventoryStatus"
+import MrpExplosion from "./pages/MrpExplosion"
 import ProductionRequests from "./pages/ProductionRequests"
 import PurchaseOrders from "./pages/PurchaseOrders"
 
@@ -50,6 +51,9 @@ export default function App() {
         } />
         <Route path="/inventory" element={
           <Layout><InventoryStatus /></Layout>
+        } />
+        <Route path="/mrp" element={
+          <Layout><MrpExplosion /></Layout>
         } />
         <Route path="/production-requests" element={
           <Layout><ProductionRequests /></Layout>

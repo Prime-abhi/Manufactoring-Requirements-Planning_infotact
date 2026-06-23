@@ -5,6 +5,7 @@ const menuItems = [
   { label: "Items", path: "/items", icon: "📦" },
   { label: "BOM Tree", path: "/bom", icon: "🌳" },
   { label: "Inventory Status", path: "/inventory", icon: "🏭" },
+  { label: "MRP Explosion", path: "/mrp", icon: "📊" },
   { label: "Production Requests", path: "/production-requests", icon: "📋" },
   { label: "Purchase Orders", path: "/purchase-orders", icon: "🛒" },
 ]
