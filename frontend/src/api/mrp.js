@@ -2,8 +2,25 @@ const BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 async function get(path) {
   const res = await fetch(`${BASE}${path}`)
-  if (!res.ok) throw new Error(`API error ${res.status}`)
-  return res.json()
+  const text = await res.text()
+  let data = null
+
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      data = text
+    }
+  }
+
+  if (!res.ok) {
+    const message = typeof data === 'object' && data !== null && 'error' in data
+      ? data.error
+      : `API error ${res.status}`
+    throw new Error(message)
+  }
+
+  return data
 }
 
 async function put(path, body) {
@@ -12,8 +29,25 @@ async function put(path, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })
-  if (!res.ok) throw new Error(`API error ${res.status}`)
-  return res.json()
+  const text = await res.text()
+  let data = null
+
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      data = text
+    }
+  }
+
+  if (!res.ok) {
+    const message = typeof data === 'object' && data !== null && 'error' in data
+      ? data.error
+      : `API error ${res.status}`
+    throw new Error(message)
+  }
+
+  return data
 }
 
 // ── Inventory ─────────────────────────────────────────────────────────────────

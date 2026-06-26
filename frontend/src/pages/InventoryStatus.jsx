@@ -62,8 +62,11 @@ const styles = `
 `
 
 function getStatus(available, minStock) {
-  if (available < minStock * 0.5) return 'CRITICAL'
-  if (available < minStock) return 'LOW'
+  const safeAvailable = Number(available) || 0
+  const safeMinStock = Number(minStock) || 0
+
+  if (safeAvailable < safeMinStock * 0.5) return 'CRITICAL'
+  if (safeAvailable < safeMinStock) return 'LOW'
   return 'OK'
 }
 
@@ -80,13 +83,25 @@ export default function InventoryStatus() {
     setError(null)
     fetchInventoryStatus()
       .then((data) => {
-        const enriched = data.map((item) => ({
+        const rawItems = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.items)
+            ? data.items
+            : Array.isArray(data?.content)
+              ? data.content
+              : []
+
+        if (data && typeof data === 'object' && !Array.isArray(rawItems) && (data.error || data.message)) {
+          throw new Error(data.error || data.message || 'Failed to load inventory data.')
+        }
+
+        const enriched = rawItems.map((item) => ({
           ...item,
-          status: getStatus(item.available, item.minStock),
+          status: getStatus(item?.available, item?.minStock),
         }))
         setItems(enriched)
       })
-      .catch(() => setError('Failed to load inventory data.'))
+      .catch((err) => setError(err.message || 'Failed to load inventory data.'))
       .finally(() => setLoading(false))
   }, [])
 

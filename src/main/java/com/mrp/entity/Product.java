@@ -1,8 +1,7 @@
- 
 package com.mrp.entity;
 
 /**
- * Product entity.
+ * Product entity — in-memory representation.
  * Represents a raw material, sub-assembly, or finished good.
  */
 public class Product {

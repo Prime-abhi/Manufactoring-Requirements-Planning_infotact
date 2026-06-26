@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/mrp")
+@CrossOrigin(origins = "*")
 public class MrpController {
 
     private final MrpService mrpService;
