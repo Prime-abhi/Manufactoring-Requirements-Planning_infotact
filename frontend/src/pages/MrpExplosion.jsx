@@ -73,8 +73,9 @@ export default function MrpExplosion() {
     try {
       const data = await explodeMRP(selectedItem, Number(quantity))
       setResults(data)
-    } catch {
-      setError('Failed to calculate MRP. Please check the API connection.')
+    } catch (err) {
+      console.error('MRP calculation failed', err)
+      setError(err?.message || 'Failed to calculate MRP. Please check the API connection.')
     } finally {
       setLoading(false)
     }

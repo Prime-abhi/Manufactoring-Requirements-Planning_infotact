@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+const BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081'
 
 async function get(path) {
   const res = await fetch(`${BASE}${path}`)
@@ -64,9 +64,9 @@ export function updateInventory(id, availableQuantity) {
 
 // ── Products / Finished Goods ─────────────────────────────────────────────────
 
-/** GET /api/items?type=FINISHED_GOOD  (used by MRP Explosion dropdown) */
+/** GET /api/products?type=FINISHED_GOOD  (used by MRP Explosion dropdown) */
 export function fetchFinishedGoods() {
-  return get('/api/items?type=FINISHED_GOOD')
+  return get('/api/products?type=FINISHED_GOOD')
 }
 
 // ── MRP Explosion ─────────────────────────────────────────────────────────────

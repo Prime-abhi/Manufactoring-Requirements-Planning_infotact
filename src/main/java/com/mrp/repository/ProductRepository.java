@@ -1,6 +1,3 @@
-<<<<<<< HEAD
- 
-=======
 package com.mrp.repository;
 
 import com.mrp.entity.Product;
@@ -44,4 +41,3 @@ public class ProductRepository {
                 .findFirst();
     }
 }
->>>>>>> bd2eb8c (updated fils)
