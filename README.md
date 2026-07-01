@@ -18,7 +18,10 @@
 1. Copy `src/main/resources/application.properties.example`
 2. Rename copy to `application.properties`
 3. Add your MySQL password
-4. Run `MrpBackendApplication.java`
+4. Build the backend jar:
+   - `./mvnw -DskipTests package`
+5. Start the backend with:
+   - `java -jar target/mrp-backend-0.0.1-SNAPSHOT.jar`
 
 ---
 

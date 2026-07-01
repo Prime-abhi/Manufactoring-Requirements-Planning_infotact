@@ -11,19 +11,20 @@ export default function SummaryCard({ label, value, color = 'blue', icon }) {
     <div style={{
       background: c.bg,
       border: `1px solid ${c.border}`,
-      borderRadius: 10,
-      padding: '16px 20px',
+      borderRadius: 14,
+      padding: '18px 20px',
       display: 'flex',
       alignItems: 'center',
       gap: 14,
-      minWidth: 160,
+      minWidth: 180,
       flex: 1,
+      boxShadow: '0 8px 20px rgba(15, 23, 42, 0.04)',
     }}>
       {icon && (
         <div style={{
           background: c.iconBg,
-          borderRadius: 8,
-          width: 40, height: 40,
+          borderRadius: 12,
+          width: 44, height: 44,
           display: 'flex', alignItems: 'center',
           justifyContent: 'center', fontSize: 20,
           flexShrink: 0,
@@ -32,10 +33,10 @@ export default function SummaryCard({ label, value, color = 'blue', icon }) {
         </div>
       )}
       <div>
-        <div style={{ fontSize: 24, fontWeight: 700, color: c.text, lineHeight: 1 }}>
+        <div style={{ fontSize: 24, fontWeight: 800, color: c.text, lineHeight: 1 }}>
           {value}
         </div>
-        <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>
+        <div style={{ fontSize: 13, color: '#475569', marginTop: 4, fontWeight: 600 }}>
           {label}
         </div>
       </div>
