@@ -541,7 +541,7 @@ export default function Items() {
                   onClick={() => setShowModal(false)} style={{
                     padding: "8px 20px", borderRadius: 6,
                     border: "1px solid #e2e8f0",
-                    background: "white", cursor: "pointer",
+                    background: "blue", cursor: "pointer",
                     fontSize: 14, fontWeight: 500
                   }}>
                   Cancel
@@ -569,10 +569,11 @@ const inputStyle = {
   width: "100%", padding: "8px 12px",
   borderRadius: 6, border: "1px solid #e2e8f0",
   fontSize: 14, outline: "none",
-  boxSizing: "border-box", background: "white"
+  boxSizing: "border-box", background: "white",
+  color: "#1e293b"
 }
 const lblStyle = {
   display: "block", fontSize: 12,
   fontWeight: 600, color: "#475569",
   marginBottom: 5
-}
+}	
