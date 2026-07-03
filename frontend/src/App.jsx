@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect } from "react"
 import Sidebar from "./components/Sidebar"
+import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import Items from "./pages/Items"
 import Bom from "./pages/Bom"
 import InventoryStatus from "./pages/InventoryStatus"
-import MrpExplosion from "./pages/MrpExplosion"
 import ProductionRequests from "./pages/ProductionRequests"
 import PurchaseOrders from "./pages/PurchaseOrders"
 
 function Layout({ children }) {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
       <div style={{
         width: 240, background: "#1e2a45",
         flexShrink: 0, position: "fixed",
@@ -20,8 +20,6 @@ function Layout({ children }) {
       }}>
         <Sidebar />
       </div>
-
-      {/* Main content */}
       <div style={{
         marginLeft: 240, flex: 1,
         background: "#f8fafc", minHeight: "100vh"
@@ -32,38 +30,67 @@ function Layout({ children }) {
   )
 }
 
+// Protected route — redirect to login if not logged in
+function Protected({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("mrp_user") || "null")
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect root to dashboard */}
+        {/* Login — public */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected routes */}
         <Route path="/" element={
-          <Layout><Dashboard /></Layout>
+          <Protected>
+            <Layout><Dashboard /></Layout>
+          </Protected>
         } />
         <Route path="/dashboard" element={
-          <Layout><Dashboard /></Layout>
+          <Protected>
+            <Layout><Dashboard /></Layout>
+          </Protected>
         } />
         <Route path="/items" element={
-          <Layout><Items /></Layout>
+          <Protected>
+            <Layout><Items /></Layout>
+          </Protected>
         } />
         <Route path="/bom" element={
-          <Layout><Bom /></Layout>
+          <Protected>
+            <Layout><Bom /></Layout>
+          </Protected>
         } />
         <Route path="/inventory" element={
-          <Layout><InventoryStatus /></Layout>
-        } />
-        <Route path="/mrp" element={
-          <Layout><MrpExplosion /></Layout>
+          <Protected>
+            <Layout><InventoryStatus /></Layout>
+          </Protected>
         } />
         <Route path="/production-requests" element={
-          <Layout><ProductionRequests /></Layout>
+          <Protected>
+            <Layout>
+              <ProductionRequests />
+            </Layout>
+          </Protected>
         } />
         <Route path="/purchase-orders" element={
-          <Layout><PurchaseOrders /></Layout>
+          <Protected>
+            <Layout>
+              <PurchaseOrders />
+            </Layout>
+          </Protected>
         } />
-        {/* Catch all → redirect to dashboard */}
+
+        {/* Catch all */}
         <Route path="*" element={
-          <Navigate to="/" replace />
+          <Navigate to="/login" replace />
         } />
       </Routes>
     </BrowserRouter>
