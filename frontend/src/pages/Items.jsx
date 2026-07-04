@@ -167,7 +167,7 @@ export default function Items() {
   }
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 24, width:"100%", boxSizing:"border-box" }}>
 
       {/* Header */}
       <div style={{ 

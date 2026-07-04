@@ -10,21 +10,24 @@ import PurchaseOrders from "./pages/PurchaseOrders"
 
 function Layout({ children }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
+    <div style={{ display: "flex", minHeight: "100vh", width: "100%" }}>
+      {/* Sidebar - fixed */}
       <div style={{
         width: 240, background: "#1e2a45",
         flexShrink: 0, position: "fixed",
         top: 0, left: 0, height: "100vh",
-        overflowY: "auto"
+        overflowY: "auto", zIndex: 100
       }}>
         <Sidebar />
       </div>
 
-      {/* Main content */}
+      {/* Main content - takes all remaining width */}
       <div style={{
-        marginLeft: 240, flex: 1,
-        background: "#f8fafc", minHeight: "100vh"
+        marginLeft: 240,
+        width: "calc(100% - 240px)",
+        background: "#f8fafc",
+        minHeight: "100vh",
+        boxSizing: "border-box"
       }}>
         {children}
       </div>

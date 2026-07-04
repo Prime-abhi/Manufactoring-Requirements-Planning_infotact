@@ -70,7 +70,7 @@ export default function Dashboard() {
   )
 
   return (
-    <div style={{ padding:"24px 28px", background:"#f8fafc", minHeight:"100vh" }}>
+    <div style={{ padding:"24px 28px", background:"#f8fafc", minHeight:"100vh", width:"100%", boxSizing:"border-box" }}>
 
       {/* ── Top Header ─────────────────────────────────────────────────── */}
       <div style={{ ...card, display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:22, padding:"18px 24px" }}>
