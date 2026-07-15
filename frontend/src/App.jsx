@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Sidebar from "./components/Sidebar"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
@@ -8,6 +8,7 @@ import Bom from "./pages/Bom"
 import InventoryStatus from "./pages/InventoryStatus"
 import ProductionRequests from "./pages/ProductionRequests"
 import PurchaseOrders from "./pages/PurchaseOrders"
+import MrpExplosion from "./pages/MrpExplosion"  // ← ADD THIS
 
 function Layout({ children }) {
   return (
@@ -30,7 +31,6 @@ function Layout({ children }) {
   )
 }
 
-// Protected route — redirect to login if not logged in
 function Protected({ children }) {
   const user = JSON.parse(
     localStorage.getItem("mrp_user") || "null")
@@ -44,10 +44,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Login — public */}
         <Route path="/login" element={<Login />} />
-
-        {/* Protected routes */}
         <Route path="/" element={
           <Protected>
             <Layout><Dashboard /></Layout>
@@ -73,22 +70,24 @@ export default function App() {
             <Layout><InventoryStatus /></Layout>
           </Protected>
         } />
+
+        {/* ← ADD THIS ROUTE */}
+        <Route path="/mrp-explosion" element={
+          <Protected>
+            <Layout><MrpExplosion /></Layout>
+          </Protected>
+        } />
+
         <Route path="/production-requests" element={
           <Protected>
-            <Layout>
-              <ProductionRequests />
-            </Layout>
+            <Layout><ProductionRequests /></Layout>
           </Protected>
         } />
         <Route path="/purchase-orders" element={
           <Protected>
-            <Layout>
-              <PurchaseOrders />
-            </Layout>
+            <Layout><PurchaseOrders /></Layout>
           </Protected>
         } />
-
-        {/* Catch all */}
         <Route path="*" element={
           <Navigate to="/login" replace />
         } />
