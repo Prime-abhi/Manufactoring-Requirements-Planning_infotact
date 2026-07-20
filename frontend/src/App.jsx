@@ -1,17 +1,23 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState } from "react"
 import Sidebar from "./components/Sidebar"
+import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
 import Items from "./pages/Items"
 import Bom from "./pages/Bom"
 import InventoryStatus from "./pages/InventoryStatus"
-import MrpExplosion from "./pages/MrpExplosion"
 import ProductionRequests from "./pages/ProductionRequests"
 import PurchaseOrders from "./pages/PurchaseOrders"
+import MrpExplosion from "./pages/MrpExplosion"  // ← ADD THIS
 
 function Layout({ children }) {
   return (
+<<<<<<< HEAD
     <div style={{ display: "flex", minHeight: "100vh", width: "100%" }}>
       {/* Sidebar - fixed */}
+=======
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+>>>>>>> origin/priyanka
       <div style={{
         width: 240, background: "#1e2a45",
         flexShrink: 0, position: "fixed",
@@ -20,8 +26,11 @@ function Layout({ children }) {
       }}>
         <Sidebar />
       </div>
+<<<<<<< HEAD
 
       {/* Main content - takes all remaining width */}
+=======
+>>>>>>> origin/priyanka
       <div style={{
         marginLeft: 240,
         width: "calc(100% - 240px)",
@@ -35,38 +44,65 @@ function Layout({ children }) {
   )
 }
 
+function Protected({ children }) {
+  const user = JSON.parse(
+    localStorage.getItem("mrp_user") || "null")
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect root to dashboard */}
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={
-          <Layout><Dashboard /></Layout>
+          <Protected>
+            <Layout><Dashboard /></Layout>
+          </Protected>
         } />
         <Route path="/dashboard" element={
-          <Layout><Dashboard /></Layout>
+          <Protected>
+            <Layout><Dashboard /></Layout>
+          </Protected>
         } />
         <Route path="/items" element={
-          <Layout><Items /></Layout>
+          <Protected>
+            <Layout><Items /></Layout>
+          </Protected>
         } />
         <Route path="/bom" element={
-          <Layout><Bom /></Layout>
+          <Protected>
+            <Layout><Bom /></Layout>
+          </Protected>
         } />
         <Route path="/inventory" element={
-          <Layout><InventoryStatus /></Layout>
+          <Protected>
+            <Layout><InventoryStatus /></Layout>
+          </Protected>
         } />
-        <Route path="/mrp" element={
-          <Layout><MrpExplosion /></Layout>
+
+        {/* ← ADD THIS ROUTE */}
+        <Route path="/mrp-explosion" element={
+          <Protected>
+            <Layout><MrpExplosion /></Layout>
+          </Protected>
         } />
+
         <Route path="/production-requests" element={
-          <Layout><ProductionRequests /></Layout>
+          <Protected>
+            <Layout><ProductionRequests /></Layout>
+          </Protected>
         } />
         <Route path="/purchase-orders" element={
-          <Layout><PurchaseOrders /></Layout>
+          <Protected>
+            <Layout><PurchaseOrders /></Layout>
+          </Protected>
         } />
-        {/* Catch all → redirect to dashboard */}
         <Route path="*" element={
-          <Navigate to="/" replace />
+          <Navigate to="/login" replace />
         } />
       </Routes>
     </BrowserRouter>

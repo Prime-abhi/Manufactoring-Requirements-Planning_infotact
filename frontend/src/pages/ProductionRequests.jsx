@@ -2,11 +2,10 @@ import { useState, useEffect } from "react"
 
 const API = "http://localhost:8080"
 
-// Temporary — will come from login later
-const CURRENT_USER = {
-  id: 1,
-  role: "PRODUCTION_MANAGER"
-}
+// NEW — reads from localStorage after login
+const CURRENT_USER = JSON.parse(
+  localStorage.getItem("mrp_user")
+) || { id: 1, role: "PLANNER" }
 
 export default function ProductionRequests() {
   const [requests, setRequests] = useState([])
@@ -27,41 +26,55 @@ export default function ProductionRequests() {
   const isManager =
     CURRENT_USER.role === "PRODUCTION_MANAGER"
 
-  useEffect(() => {
-    loadRequests()
-    loadItems()
-  }, [])
-
-  const loadRequests = async () => {
-    setLoading(true)
+  const loadRequests = async (ignore = false) => {
+    if (!ignore) setLoading(true)
     try {
       const url = isManager
         ? `${API}/api/production-requests`
         : `${API}/api/production-requests/my/${CURRENT_USER.id}`
       const res = await fetch(url)
       if (!res.ok) throw new Error("Failed")
-      setRequests(await res.json())
-      setPageError("")
+      const data = await res.json()
+      if (!ignore) {
+        setRequests(data)
+        setPageError("")
+      }
     } catch {
-      setPageError(
-        "Cannot connect to backend. " +
-        "Make sure Spring Boot is running.")
+      if (!ignore) {
+        setPageError(
+          "Cannot connect to backend. " +
+          "Make sure Spring Boot is running.")
+      }
     } finally {
-      setLoading(false)
+      if (!ignore) setLoading(false)
     }
   }
 
-  const loadItems = async () => {
+  const loadItems = async (ignore = false) => {
     try {
       const res = await fetch(`${API}/api/items`)
       if (!res.ok) throw new Error("Failed")
       const data = await res.json()
-      setItems(data.filter(
-        i => i.itemType === "FINISHED_GOOD"))
+      if (!ignore) {
+        setItems(data.filter(
+          i => i.itemType === "FINISHED_GOOD"))
+      }
     } catch {
-      setPageError("Failed to load items.")
+      if (!ignore) setPageError("Failed to load items.")
     }
   }
+
+  useEffect(() => {
+    let ignore = false
+
+    Promise.resolve().then(() => {
+      if (!ignore) loadRequests(ignore)
+      if (!ignore) loadItems(ignore)
+    })
+
+    return () => { ignore = true }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleCreate = async (e) => {
     e.preventDefault()
