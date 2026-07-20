@@ -12,12 +12,8 @@ import MrpExplosion from "./pages/MrpExplosion"  // ← ADD THIS
 
 function Layout({ children }) {
   return (
-<<<<<<< HEAD
     <div style={{ display: "flex", minHeight: "100vh", width: "100%" }}>
       {/* Sidebar - fixed */}
-=======
-    <div style={{ display: "flex", minHeight: "100vh" }}>
->>>>>>> origin/priyanka
       <div style={{
         width: 240, background: "#1e2a45",
         flexShrink: 0, position: "fixed",
@@ -26,11 +22,8 @@ function Layout({ children }) {
       }}>
         <Sidebar />
       </div>
-<<<<<<< HEAD
 
       {/* Main content - takes all remaining width */}
-=======
->>>>>>> origin/priyanka
       <div style={{
         marginLeft: 240,
         width: "calc(100% - 240px)",

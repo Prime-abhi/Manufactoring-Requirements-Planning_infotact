@@ -36,6 +36,7 @@ public class ProductionRequestService {
         ProductionRequest request = new ProductionRequest();
         request.setItem(item);
         request.setRequestedQuantity(quantity);
+        request.setQuantity(quantity);
         request.setRequestedBy(requestedBy);
         request.setNotes(notes);
         request.setStatus(ProductionRequest.Status.PENDING);

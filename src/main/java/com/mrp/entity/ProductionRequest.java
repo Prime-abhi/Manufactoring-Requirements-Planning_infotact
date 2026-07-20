@@ -18,6 +18,9 @@ public class ProductionRequest {
     @Column(name = "requested_quantity", nullable = false)
     private Integer requestedQuantity;
 
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
     @ManyToOne
     @JoinColumn(name = "requested_by", nullable = false)
     private User requestedBy;
@@ -44,6 +47,9 @@ public class ProductionRequest {
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.quantity == null) {
+            this.quantity = this.requestedQuantity;
+        }
     }
 
     public Long getId() { return id; }
@@ -53,7 +59,15 @@ public class ProductionRequest {
     public void setItem(Item item) { this.item = item; }
 
     public Integer getRequestedQuantity() { return requestedQuantity; }
-    public void setRequestedQuantity(Integer requestedQuantity) { this.requestedQuantity = requestedQuantity; }
+    public void setRequestedQuantity(Integer requestedQuantity) {
+        this.requestedQuantity = requestedQuantity;
+        if (this.quantity == null) {
+            this.quantity = requestedQuantity;
+        }
+    }
+
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
     public User getRequestedBy() { return requestedBy; }
     public void setRequestedBy(User requestedBy) { this.requestedBy = requestedBy; }
